@@ -3,36 +3,30 @@ BEGIN;
 Drop TABLE IF EXISTS sellers, items, categories, item_category CASCADE;
 
 CREATE TABLE sellers (
-    id serial primary key,
+    seller_id serial primary key,
     seller_name varchar(100) not null
 );
 
 CREATE TABLE items (
-    id serial primary key,
+    item_id serial primary key,
     item_name varchar(100) not null,
     price int not null , 
     -- FOREIGN KEY (seller_id) REFERENCES sellers(id) 
-    seller_id integer REFERENCES sellers(id) ON UPDATE CASCADE 
-
-
+    seller_id integer REFERENCES sellers(seller_id) on DELETE CASCADE
 );
 
-
-
 CREATE TABLE categories (
-    id serial primary key,
+    category_id serial primary key,
     name varchar(100) not null
 );
 
 CREATE TABLE item_category(
     id serial primary key ,
-    item_id integer REFERENCES items(id) ON UPDATE CASCADE ,
-    category_id integer REFERENCES categories(id) ON UPDATE CASCADE 
+    item_id integer REFERENCES items(item_id) ON DELETE CASCADE ,
+    category_id integer REFERENCES categories(category_id) ON DELETE CASCADE 
     -- FOREIGN KEY (item_id) REFERENCES items(id),
     -- FOREIGN KEY (category_id) REFERENCES categories(id)
 );
-
-
 
 -- Insert sellers 
 INSERT INTO sellers (seller_name) values ('Ali') , ('Saif') , ('Mostafa');
