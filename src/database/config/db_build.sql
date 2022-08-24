@@ -4,12 +4,12 @@ Drop TABLE IF EXISTS sellers, items, categories, item_category CASCADE;
 
 CREATE TABLE sellers (
     id serial primary key,
-    name varchar(100) not null
+    seller_name varchar(100) not null
 );
 
 CREATE TABLE items (
     id serial primary key,
-    name varchar(100) not null,
+    item_name varchar(100) not null,
     price int not null , 
     -- FOREIGN KEY (seller_id) REFERENCES sellers(id) 
     seller_id integer REFERENCES sellers(id) ON UPDATE CASCADE 
@@ -35,14 +35,14 @@ CREATE TABLE item_category(
 
 
 -- Insert sellers 
-INSERT INTO sellers (name) values ('Ali') , ('Saif') , ('Mostafa');
+INSERT INTO sellers (seller_name) values ('Ali') , ('Saif') , ('Mostafa');
 
 -- Insert cateogries 
 INSERT INTO categories (name) values ('Mobile') , ('Laptop') , ('Tablet') , ('Samsung') , ('Apple') , ('Asus') , ('Msi');
 
 
 -- Insert static items 
-INSERT INTO items (name, price, seller_id) values ('iPhone 12',2000,1) , ('Asus 10', 1500, 1) , ('ipad 12',1200,2);
+INSERT INTO items (item_name, price, seller_id) values ('iPhone 12',2000,1) , ('Asus 10', 1500, 1) , ('ipad 12',1200,2);
 
 
 -- Insert item_category 
