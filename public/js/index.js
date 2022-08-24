@@ -6,13 +6,22 @@ const seller = document.querySelector('#seller');
 const category = document.querySelector('#category');
 
 //! Get all tables DB data
+const deleteItem = (id) => {
+  console.log(id);
+  const options = {
+    method: 'DELETE',
+  };
+
+  fetch(`/deleteItem/${id}`, options)
+  .then(data => fetchAll());
+};
 
 const fetchAll = () => {
   fetch('/items')
     .then((data) => data.json())
     .then((res) => {
-      console.log(res);
       tBody.textContent = '';
+
       res.forEach((ele, index) => {
         tBody.innerHTML += `
         <tr>
@@ -20,10 +29,13 @@ const fetchAll = () => {
             <td>${ele.item_name}</td>
             <td>${ele.price}</td>
             <td>${ele.seller_name}</td>
+            <td><button onclick = "deleteItem(${ele.item_id})">Delete ${ele.item_id}</button></td>
         </tr>
         `;
       });
     })
+
+
     .catch((err) => err);
 
   fetch('/sellers')
@@ -32,26 +44,28 @@ const fetchAll = () => {
       seller.textContent = '';
       res.forEach((ele) => {
         seller.innerHTML += `
-        <option id= "${ele.id}">${ele.seller_name}</option>
+        <option id= "${ele.seller_id}">${ele.seller_name}</option>
       `;
       });
     })
     .catch((err) => err);
 
-  fetch('/categories')
-    .then((data) => data.json())
-    .then((res) => {
-      category.textContent = '';
-      res.forEach((ele) => {
-        category.innerHTML += `
-        <input type="checkbox" name="${ele.name}" id="${ele.id}">
-        <label for="${ele.id}">${ele.name}</label>        
-      `;
-      });
-    })
-    .catch((err) => err);
+  // fetch('/categories')
+  //   .then((data) => data.json())
+  //   .then((res) => {
+  //     category.textContent = '';
+  //     res.forEach((ele) => {
+  //       category.innerHTML += `
+  //       <input type="checkbox" name="${ele.name}" id="${ele.id}">
+  //       <label for="${ele.id}">${ele.name}</label>        
+  //     `;
+  //     });
+  //   })
+  //   .catch((err) => err);
 };
 fetchAll();
+
+
 
 //! store all form info to DB:
 
