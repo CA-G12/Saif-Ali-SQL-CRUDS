@@ -33,6 +33,7 @@ CREATE TABLE item_category(
 );
 
 
+
 -- Insert sellers 
 INSERT INTO sellers (name) values ('Ali') , ('Saif') , ('Mostafa');
 
