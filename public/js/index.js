@@ -5,73 +5,81 @@ const itemPrice = document.querySelector('#item-price');
 const seller = document.querySelector('#seller');
 const category = document.querySelector('#category');
 
-fetch('/items')
-  .then((data) => data.json())
-  .then((res) => {
-    tBody.textContent = '';
-    res.forEach((ele) => {
-      tBody.innerHTML += `
+//! Get all tables DB data
+
+const fetchAll = () => {
+  fetch('/items')
+    .then((data) => data.json())
+    .then((res) => {
+      console.log(res);
+      tBody.textContent = '';
+      res.forEach((ele, index) => {
+        tBody.innerHTML += `
         <tr>
-            <td>${ele.id}</td>
-            <td>${ele.name}</td>
+            <td>${index + 1}</td>
+            <td>${ele.item_name}</td>
             <td>${ele.price}</td>
-            <td>+${ele.seller_id}</td>
-            <td>-0.36%</td>
+            <td>${ele.seller_name}</td>
         </tr>
         `;
-    });
-  })
-  .catch((err) => err);
+      });
+    })
+    .catch((err) => err);
 
-//! Append Sellers names to Home Page Dynamically
-
-fetch('/sellers')
-  .then((data) => data.json())
-  .then((res) => {
-    seller.textContent = '';
-    res.forEach((ele) => {
-      seller.innerHTML += `
-        <option>${ele.name}</option>
+  fetch('/sellers')
+    .then((data) => data.json())
+    .then((res) => {
+      seller.textContent = '';
+      res.forEach((ele) => {
+        seller.innerHTML += `
+        <option id= "${ele.id}">${ele.seller_name}</option>
       `;
-    });
-  })
-  .catch((err) => err);
+      });
+    })
+    .catch((err) => err);
 
-//! Append Categories names to Home Page Dynamically
-
-fetch('/categories')
-  .then((data) => data.json())
-  .then((res) => {
-    console.log(res);
-    category.textContent = '';
-    res.forEach((ele) => {
-      category.innerHTML += `
-        <input type="checkbox" name="${ele.name}" id="${ele.name}">
-        <label for="${ele.name}">${ele.name}</label>        
+  fetch('/categories')
+    .then((data) => data.json())
+    .then((res) => {
+      category.textContent = '';
+      res.forEach((ele) => {
+        category.innerHTML += `
+        <input type="checkbox" name="${ele.name}" id="${ele.id}">
+        <label for="${ele.id}">${ele.name}</label>        
       `;
-    });
-  })
-  .catch((err) => err);
+      });
+    })
+    .catch((err) => err);
+};
+fetchAll();
 
-//! Append Categories names to Home Page Dynamically
+//! store all form info to DB:
 
+submitBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  const checkedCategories = [];
+  const categoriesElements = Array.from(category.querySelectorAll('input[type="checkbox"]'));
+  categoriesElements.forEach(ele => ele.checked ? checkedCategories.push(ele.id) : '');
 
+  const data = {
+    name: itemName.value,
+    seller_id: seller.options[seller.selectedIndex].id,
+    price: itemPrice.value,
+    category: checkedCategories,
+  };
 
+  const options = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  };
 
+  fetch('/insertItems', options)
+    .then(data => fetchAll());
 
-// submitBtn.addEventListener('click', () => {
+  document.querySelector('form').reset();
+});
 
-//   const data = {
-//     name: itemName.value,
-//     seller: seller.value,
-//     price: itemPrice.value,
-//   };
+//! store categories into Joint tables
 
-//   const options = {
-//     method: 'POST',
-//     body: JSON.stringify(data),
-//     headers: { 'Content-Type': 'application/json' }
-//   };
-
-
-// });
+// deleteBtn
