@@ -5,16 +5,7 @@ const itemPrice = document.querySelector('#item-price');
 const seller = document.querySelector('#seller');
 const category = document.querySelector('#category');
 
-//! Get all tables DB data
-const deleteItem = (id) => {
-  console.log(id);
-  const options = {
-    method: 'DELETE',
-  };
-
-  fetch(`/deleteItem/${id}`, options)
-  .then(data => fetchAll());
-};
+//! Get all DB tables  data
 
 const fetchAll = () => {
   fetch('/items')
@@ -29,13 +20,12 @@ const fetchAll = () => {
             <td>${ele.item_name}</td>
             <td>${ele.price}</td>
             <td>${ele.seller_name}</td>
-            <td><button onclick = "deleteItem(${ele.item_id})">Delete ${ele.item_id}</button></td>
-        </tr>
+            <td><button class = 'del-btn' onclick = "deleteItem(${ele.item_id})">DEL</button></td>
+
+            </tr>
         `;
       });
     })
-
-
     .catch((err) => err);
 
   fetch('/sellers')
@@ -57,7 +47,7 @@ const fetchAll = () => {
   //     res.forEach((ele) => {
   //       category.innerHTML += `
   //       <input type="checkbox" name="${ele.name}" id="${ele.id}">
-  //       <label for="${ele.id}">${ele.name}</label>        
+  //       <label for="${ele.id}">${ele.name}</label>
   //     `;
   //     });
   //   })
@@ -65,15 +55,13 @@ const fetchAll = () => {
 };
 fetchAll();
 
-
-
 //! store all form info to DB:
 
 submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const checkedCategories = [];
   const categoriesElements = Array.from(category.querySelectorAll('input[type="checkbox"]'));
-  categoriesElements.forEach(ele => ele.checked ? checkedCategories.push(ele.id) : '');
+  categoriesElements.forEach((ele) => (ele.checked ? checkedCategories.push(ele.id) : ''));
 
   const data = {
     name: itemName.value,
@@ -89,11 +77,35 @@ submitBtn.addEventListener('click', (e) => {
   };
 
   fetch('/insertItems', options)
-    .then(data => fetchAll());
+    .then(() => fetchAll());
 
   document.querySelector('form').reset();
 });
 
-//! store categories into Joint tables
+const deleteItem = (id) => {
+  fetch(`/deleteItem/${id}`, { method: 'DELETE' })
+    .then(() => fetchAll());
+};
 
-// deleteBtn
+// const updateItem = (id) => {
+//   const checkedCategories = [];
+//   const categoriesElements = Array.from(category.querySelectorAll('input[type="checkbox"]'));
+//   categoriesElements.forEach((ele) => (ele.checked ? checkedCategories.push(ele.id) : ''));
+
+//   const editedData = {
+//     name: itemName.value,
+//     seller_id: seller.options[seller.selectedIndex].id,
+//     price: itemPrice.value,
+//     category: checkedCategories,
+//   };
+
+//   const options = {
+//     method: 'POST',
+//     body: JSON.stringify(editedData),
+//     headers: { 'Content-Type': 'application/json' },
+//   };
+
+//   fetch(`/updateItem/${id}`, options)
+//     .then(() => fetchAll());
+//   document.querySelector('form').reset();
+// };

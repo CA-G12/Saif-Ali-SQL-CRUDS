@@ -12,7 +12,7 @@ CREATE TABLE items (
     item_name varchar(100) not null,
     price int not null , 
     -- FOREIGN KEY (seller_id) REFERENCES sellers(id) 
-    seller_id integer REFERENCES sellers(seller_id) on DELETE CASCADE
+    seller_id integer REFERENCES sellers(seller_id) on UPDATE on DELETE CASCADE
 );
 
 CREATE TABLE categories (
