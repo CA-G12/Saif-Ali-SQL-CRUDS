@@ -2,4 +2,4 @@
 ## ECOMMERCE DASHBOARD
 
 
-[LIVE LINK](https://ali-saif-sql.herokuapp.com/)
+[LIVE LINK](https://sal-tronic.herokuapp.com/)
